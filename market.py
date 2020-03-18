@@ -2,9 +2,9 @@
 
 import requests
 import csv
-import pymysql
+from influxdb import InfluxDBClient
 import creds
-
+import sys
 
 """
 Define a function to get the current information for a single stock symbol from the Alpha Vantage API
@@ -12,14 +12,14 @@ Define a function to get the current information for a single stock symbol from 
 def get_quote(symbol):
 
         # Specify the Alpha Vantage API URL and a friendly user-agent before hitting the API
-        url = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + symbol + '&apikey=' + creds.vantage_creds['api_key'] + '&datatype=csv'
+        url = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}&apikey={creds.vantage_creds['api_key']}&datatype=csv"
         user_agent = 'Stock Market Graphing / https://github.com/ericoc/'
         headers = { 'User-Agent': user_agent}
         data = requests.get(url, headers=headers)
         data.raise_for_status()
 
         # If the API did not rate limit, write the CSV locally for parsing
-        filename = symbol + '.csv'
+        filename = f"{symbol}.csv"
         if 'Our standard API call frequency is 5 calls per minute' not in data.text:
             with open(filename, 'w') as f:
                 f.write(data.text)
@@ -34,31 +34,26 @@ def get_quote(symbol):
 # Wrap this whole thing in a big try to catch any and all exceptions
 try:
 
-    # Connect to MySQL (with read-write credentials) and open a database cursor
-    dbh = pymysql.connect(host=creds.db_creds_rw['host'], user=creds.db_creds_rw['user'], passwd=creds.db_creds_rw['passwd'], db=creds.db_creds_rw['db'])
-    with dbh.cursor() as dbc:
+    # Connect to InfluxDB (with read-write credentials)
+    client = InfluxDBClient(host=creds.db_creds_rw['host'], port=8086, username=creds.db_creds_rw['user'], password=creds.db_creds_rw['passwd'], database=creds.db_creds_rw['db'])
 
-        # Loop through requested symbols
-        for symbol in creds.symbols:
+    # Loop through requested symbols
+    for symbol in creds.symbols:
 
-            # Get quote for the current symbol
-            quote = get_quote(symbol)
+        # Get quote for the current symbol
+        quote = get_quote(symbol)
 
-            # Create a query to insert the price for the current symbol with current timestamp
-            insert_quote = ("INSERT INTO `quotes` (`time`, `symbol`, `price`)"
-                            "VALUES (NOW(), %(symbol)s, %(price)s)")
-
-            # Fill in the details and execute the query
-            quote_values = {
-                            'symbol': symbol,
-                            'price': quote['price']
-                            }
-            dbc.execute(insert_quote, quote_values)
-
-    # End database cursor, commit the transaction, and close the MySQL connection
-    dbh.commit()
-    dbh.close()
+        # Insert the latest price for the current symbol
+        data = f"quotes,symbol={symbol} price={quote['price']}"
+        insert_quote = client.write(data, params={'db': creds.db_creds_rw['db']}, protocol='line')
+        if insert_quote != True:
+            raise Exception(f"Stock symbol {symbol} ({quote['price']}) failed to insert")
 
 # Print any exceptions
 except Exception as e:
-    print(e)
+    sys.stderr.write(str(e))
+    exit(1)
+
+# Close the InfluxDB connection
+finally:
+    client.close()
