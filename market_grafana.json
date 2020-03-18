@@ -1,34 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_MARKET",
-      "label": "market",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "mysql",
-      "pluginName": "MySQL"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "6.6.2"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": ""
-    },
-    {
-      "type": "datasource",
-      "id": "mysql",
-      "name": "MySQL",
-      "version": "1.0.0"
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -46,24 +16,25 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": null,
-  "iteration": 1584544669432,
+  "id": 19,
   "links": [],
   "panels": [
     {
       "aliasColors": {
         "DJIA": "blue",
-        "INX": "green"
+        "INX": "green",
+        "quotes.mean {symbol: DJIA}": "blue",
+        "quotes.mean {symbol: INX}": "green"
       },
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_MARKET}",
+      "datasource": "market",
       "description": "Price of stock market indexes as recorded every ten (10) minutes",
       "fill": 0,
       "fillGradient": 5,
       "gridPos": {
-        "h": 16,
+        "h": 8,
         "w": 24,
         "x": 0,
         "y": 0
@@ -94,47 +65,53 @@
       "renderer": "flot",
       "repeat": null,
       "repeatDirection": "h",
-      "seriesOverrides": [
-        {
-          "alias": "DJIA",
-          "color": "#5794F2"
-        },
-        {
-          "alias": "INX",
-          "color": "#73BF69"
-        }
-      ],
+      "seriesOverrides": [],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "format": "time_series",
-          "group": [],
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  `time`,\n  `symbol`,\n  `price`\nFROM `quotes`\nWHERE\n  `symbol` IN ($stock_symbol) AND\n  $__timeFilter(`time`);",
-          "refId": "A",
+          "alias": "",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "symbol"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "quotes",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "B",
+          "resultFormat": "time_series",
           "select": [
             [
               {
                 "params": [
                   "price"
                 ],
-                "type": "column"
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
               }
             ]
           ],
-          "table": "quotes",
-          "timeColumn": "time",
-          "timeColumnType": "timestamp",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
+          "tags": []
         }
       ],
       "thresholds": [],
@@ -144,65 +121,65 @@
           "colorMode": "yellow",
           "fill": true,
           "fillColor": "rgba(234, 112, 112, 0.12)",
-          "from": "13:00",
+          "from": "13:30",
           "fromDayOfWeek": 1,
           "line": true,
           "lineColor": "rgba(237, 46, 24, 0.60)",
           "op": "time",
-          "to": "21:00",
+          "to": "20:00",
           "toDayOfWeek": 1
         },
         {
           "colorMode": "yellow",
           "fill": true,
           "fillColor": "rgba(234, 112, 112, 0.12)",
-          "from": "13:00",
+          "from": "13:30",
           "fromDayOfWeek": 2,
           "line": true,
           "lineColor": "rgba(237, 46, 24, 0.60)",
           "op": "time",
-          "to": "21:00",
+          "to": "20:00",
           "toDayOfWeek": 2
         },
         {
           "colorMode": "yellow",
           "fill": true,
           "fillColor": "rgba(234, 112, 112, 0.12)",
-          "from": "13:00",
+          "from": "13:30",
           "fromDayOfWeek": 3,
           "line": true,
           "lineColor": "rgba(237, 46, 24, 0.60)",
           "op": "time",
-          "to": "21:00",
+          "to": "20:00",
           "toDayOfWeek": 3
         },
         {
           "colorMode": "yellow",
           "fill": true,
           "fillColor": "rgba(234, 112, 112, 0.12)",
-          "from": "13:00",
+          "from": "13:30",
           "fromDayOfWeek": 4,
           "line": true,
           "lineColor": "rgba(237, 46, 24, 0.60)",
           "op": "time",
-          "to": "21:00",
+          "to": "20:00",
           "toDayOfWeek": 4
         },
         {
           "colorMode": "yellow",
           "fill": true,
           "fillColor": "rgba(234, 112, 112, 0.12)",
-          "from": "13:00",
+          "from": "13:30",
           "fromDayOfWeek": 5,
           "line": true,
           "lineColor": "rgba(237, 46, 24, 0.60)",
           "op": "time",
-          "to": "21:00",
+          "to": "20:00",
           "toDayOfWeek": 5
         }
       ],
       "timeShift": null,
-      "title": "Market Values",
+      "title": "Market Index Values",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -239,6 +216,489 @@
         "align": false,
         "alignLevel": null
       }
+    },
+    {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                20000
+              ],
+              "type": "lt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "10m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "last"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "10m",
+        "frequency": "10m",
+        "handler": 1,
+        "message": "Dow Jones Industrial Average (DJIA) is tanking",
+        "name": "Dow Jones Industrial Average (DJIA) alert",
+        "noDataState": "no_data",
+        "notifications": []
+      },
+      "aliasColors": {
+        "DJIA": "blue",
+        "INX": "green",
+        "Price": "blue",
+        "quotes.mean {symbol: DJIA}": "blue"
+      },
+      "bars": true,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "market",
+      "description": "Price of Down Jones Industrial Average (DJIA) as recorded every ten (10) minutes",
+      "fill": 1,
+      "fillGradient": 10,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "hiddenSeries": false,
+      "id": 3,
+      "interval": "10m",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": true,
+        "values": true
+      },
+      "lines": false,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 1,
+      "points": false,
+      "renderer": "flot",
+      "repeatDirection": "h",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+        {
+          "alias": "Price",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "quotes",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "price"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "symbol",
+              "operator": "=",
+              "value": "DJIA"
+            }
+          ]
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "lt",
+          "value": 20000
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [
+        {
+          "colorMode": "yellow",
+          "fill": true,
+          "fillColor": "rgba(234, 112, 112, 0.12)",
+          "from": "13:30",
+          "fromDayOfWeek": 1,
+          "line": true,
+          "lineColor": "rgba(237, 46, 24, 0.60)",
+          "op": "time",
+          "to": "20:00",
+          "toDayOfWeek": 1
+        },
+        {
+          "colorMode": "yellow",
+          "fill": true,
+          "fillColor": "rgba(234, 112, 112, 0.12)",
+          "from": "13:30",
+          "fromDayOfWeek": 2,
+          "line": true,
+          "lineColor": "rgba(237, 46, 24, 0.60)",
+          "op": "time",
+          "to": "20:00",
+          "toDayOfWeek": 2
+        },
+        {
+          "colorMode": "yellow",
+          "fill": true,
+          "fillColor": "rgba(234, 112, 112, 0.12)",
+          "from": "13:30",
+          "fromDayOfWeek": 3,
+          "line": true,
+          "lineColor": "rgba(237, 46, 24, 0.60)",
+          "op": "time",
+          "to": "20:00",
+          "toDayOfWeek": 3
+        },
+        {
+          "colorMode": "yellow",
+          "fill": true,
+          "fillColor": "rgba(234, 112, 112, 0.12)",
+          "from": "13:30",
+          "fromDayOfWeek": 4,
+          "line": true,
+          "lineColor": "rgba(237, 46, 24, 0.60)",
+          "op": "time",
+          "to": "20:00",
+          "toDayOfWeek": 4
+        },
+        {
+          "colorMode": "yellow",
+          "fill": true,
+          "fillColor": "rgba(234, 112, 112, 0.12)",
+          "from": "13:30",
+          "fromDayOfWeek": 5,
+          "line": true,
+          "lineColor": "rgba(237, 46, 24, 0.60)",
+          "op": "time",
+          "to": "20:00",
+          "toDayOfWeek": 5
+        }
+      ],
+      "timeShift": null,
+      "title": "Dow Jones Industrial Average (DJIA)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "Dow Jones Industrial Average (DJIA)",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                2400
+              ],
+              "type": "lt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "10m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "last"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "10m",
+        "frequency": "10m",
+        "handler": 1,
+        "message": "S&P 500 (INX) Index is tanking",
+        "name": "S&P 500 (INX) Index alert",
+        "noDataState": "no_data",
+        "notifications": []
+      },
+      "aliasColors": {
+        "DJIA": "blue",
+        "INX": "green",
+        "Price": "green",
+        "price": "blue",
+        "quotes.mean": "green"
+      },
+      "bars": true,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "market",
+      "description": "Price of S&P 500 Index (INX) as recorded every ten (10) minutes",
+      "fill": 1,
+      "fillGradient": 10,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "hiddenSeries": false,
+      "id": 4,
+      "interval": "10m",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": true,
+        "values": true
+      },
+      "lines": false,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 1,
+      "points": false,
+      "renderer": "flot",
+      "repeatDirection": "h",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+        {
+          "alias": "Price",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "quotes",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "price"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "symbol",
+              "operator": "=",
+              "value": "INX"
+            }
+          ]
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "lt",
+          "value": 2400
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [
+        {
+          "colorMode": "yellow",
+          "fill": true,
+          "fillColor": "rgba(234, 112, 112, 0.12)",
+          "from": "13:30",
+          "fromDayOfWeek": 1,
+          "line": true,
+          "lineColor": "rgba(237, 46, 24, 0.60)",
+          "op": "time",
+          "to": "20:00",
+          "toDayOfWeek": 1
+        },
+        {
+          "colorMode": "yellow",
+          "fill": true,
+          "fillColor": "rgba(234, 112, 112, 0.12)",
+          "from": "13:30",
+          "fromDayOfWeek": 2,
+          "line": true,
+          "lineColor": "rgba(237, 46, 24, 0.60)",
+          "op": "time",
+          "to": "20:00",
+          "toDayOfWeek": 2
+        },
+        {
+          "colorMode": "yellow",
+          "fill": true,
+          "fillColor": "rgba(234, 112, 112, 0.12)",
+          "from": "13:30",
+          "fromDayOfWeek": 3,
+          "line": true,
+          "lineColor": "rgba(237, 46, 24, 0.60)",
+          "op": "time",
+          "to": "20:00",
+          "toDayOfWeek": 3
+        },
+        {
+          "colorMode": "yellow",
+          "fill": true,
+          "fillColor": "rgba(234, 112, 112, 0.12)",
+          "from": "13:30",
+          "fromDayOfWeek": 4,
+          "line": true,
+          "lineColor": "rgba(237, 46, 24, 0.60)",
+          "op": "time",
+          "to": "20:00",
+          "toDayOfWeek": 4
+        },
+        {
+          "colorMode": "yellow",
+          "fill": true,
+          "fillColor": "rgba(234, 112, 112, 0.12)",
+          "from": "13:30",
+          "fromDayOfWeek": 5,
+          "line": true,
+          "lineColor": "rgba(237, 46, 24, 0.60)",
+          "op": "time",
+          "to": "20:00",
+          "toDayOfWeek": 5
+        }
+      ],
+      "timeShift": null,
+      "title": "S&P 500 (INX) Index",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "S&P 500 Index (INX)",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     }
   ],
   "refresh": false,
@@ -251,33 +711,10 @@
     "markets"
   ],
   "templating": {
-    "list": [
-      {
-        "allValue": null,
-        "current": {},
-        "datasource": "${DS_MARKET}",
-        "definition": "SELECT DISTINCT(`symbol`) FROM `quotes` WHERE $__timeFilter(`time`) ORDER BY `symbol` ASC",
-        "hide": 0,
-        "includeAll": true,
-        "label": "Stock Symbol",
-        "multi": true,
-        "name": "stock_symbol",
-        "options": [],
-        "query": "SELECT DISTINCT(`symbol`) FROM `quotes` WHERE $__timeFilter(`time`) ORDER BY `symbol` ASC",
-        "refresh": 2,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tags": [],
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
-      }
-    ]
+    "list": []
   },
   "time": {
-    "from": "now-12h",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {
@@ -297,6 +734,6 @@
   },
   "timezone": "utc",
   "title": "Markets",
-  "uid": "3jRMjsXZk",
-  "version": 17
+  "uid": "6JdbnlXZk",
+  "version": 12
 }
