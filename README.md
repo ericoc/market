@@ -21,10 +21,13 @@ I'm pretty sure the United States stock market (NYSE) opens and closes based on 
 - If the Alpha Vantage API fails for some reason, or rate limits my requests (more likely), the existing local CSV from the last time that the script ran will be used simply storing the older data in MySQL again.
 I probably should just not write any data to the database if the latest price cannot be found, or if the API fails somehow.
 
-- The Alpha Vantage API also offers quite a few other columns besides the latest price which I should look into storing (in MySQL as well?) for other uses. For example, the CSV data return by the Alpha Vantage API for the Dow Jones Industrial Average (DJIA) on a random Wednesday morning looks like this:
+- The Alpha Vantage API also offers quite a few other columns besides the latest price which I should look into storing (in MySQL as well?) for other uses.
+For example, the CSV data return by the Alpha Vantage API for the Dow Jones Industrial Average (DJIA) on a random Wednesday morning [looks like this](DJIA.example.csv):
+
 
     symbol,open,high,low,price,volume,latestDay,previousClose,change,changePercent
-    DJIA,20188.6895,20489.3301,19871.4492,20007.3008,199935488,2020-03-18,21237.3809,-1230.0801,-5.7921%
+    DJIA,20188.6895,20489.3301,19808.9004,19888.1406,252900423,2020-03-18,21237.3809,-1349.2402,-6.3531%
+
 
 - I probably should not be using MySQL, but it was easiest for me when I decided to make this.
 Since I'm using this with Grafana, the longer term plan should likely be to use a "time-series database" (maybe Graphs, OpenTSDB, or InfluxDB).

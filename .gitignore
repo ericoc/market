@@ -9,3 +9,4 @@ creds.py
 .*
 *~
 !.gitignore
+!DJIA.example.csv
