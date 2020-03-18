@@ -9,6 +9,10 @@ Specifically, Alpha Vantage has a [quote endpoint](https://www.alphavantage.co/d
 The cron job listed at [market.cron](market.cron) will execute [market.py](market.py) every ten (10) minutes between 9:30AM and 4:00PM Monday through Friday (which is when the stock market is open in the United States).
 The [market.py](market.py) script gets CSV output from the Alpha Vantage API, stores the CSV locally, parses out the latest price, and writes that data to MySQL (see [the table schema](market.sql)).
 
+The JSON for the Grafana dashboard that I ended up with is [available here](market_grafana.json) and here is a screenshot preview:
+
+![Grafana dashboard preview of stock market recording](market_grafana.png "Grafana Stock Market Dashboard Preview")
+
 #### TODO
 
 - If the Alpha Vantage API fails for some reason, or rate limits my requests (more likely), the existing local CSV from the last time that the script ran will be used simply storing the older data in MySQL again.

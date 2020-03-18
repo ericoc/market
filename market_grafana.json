@@ -1,0 +1,302 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_MARKET",
+      "label": "market",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "mysql",
+      "pluginName": "MySQL"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "6.6.2"
+    },
+    {
+      "type": "panel",
+      "id": "graph",
+      "name": "Graph",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "mysql",
+      "name": "MySQL",
+      "version": "1.0.0"
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Current market values recorded every ten (10) minutes",
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "iteration": 1584544669432,
+  "links": [],
+  "panels": [
+    {
+      "aliasColors": {
+        "DJIA": "blue",
+        "INX": "green"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_MARKET}",
+      "description": "Price of stock market indexes as recorded every ten (10) minutes",
+      "fill": 0,
+      "fillGradient": 5,
+      "gridPos": {
+        "h": 16,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "hiddenSeries": false,
+      "id": 2,
+      "interval": "10m",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": true,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 1,
+      "points": true,
+      "renderer": "flot",
+      "repeat": null,
+      "repeatDirection": "h",
+      "seriesOverrides": [
+        {
+          "alias": "DJIA",
+          "color": "#5794F2"
+        },
+        {
+          "alias": "INX",
+          "color": "#73BF69"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  `time`,\n  `symbol`,\n  `price`\nFROM `quotes`\nWHERE\n  `symbol` IN ($stock_symbol) AND\n  $__timeFilter(`time`);",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "price"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "quotes",
+          "timeColumn": "time",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [
+        {
+          "colorMode": "yellow",
+          "fill": true,
+          "fillColor": "rgba(234, 112, 112, 0.12)",
+          "from": "13:00",
+          "fromDayOfWeek": 1,
+          "line": true,
+          "lineColor": "rgba(237, 46, 24, 0.60)",
+          "op": "time",
+          "to": "21:00",
+          "toDayOfWeek": 1
+        },
+        {
+          "colorMode": "yellow",
+          "fill": true,
+          "fillColor": "rgba(234, 112, 112, 0.12)",
+          "from": "13:00",
+          "fromDayOfWeek": 2,
+          "line": true,
+          "lineColor": "rgba(237, 46, 24, 0.60)",
+          "op": "time",
+          "to": "21:00",
+          "toDayOfWeek": 2
+        },
+        {
+          "colorMode": "yellow",
+          "fill": true,
+          "fillColor": "rgba(234, 112, 112, 0.12)",
+          "from": "13:00",
+          "fromDayOfWeek": 3,
+          "line": true,
+          "lineColor": "rgba(237, 46, 24, 0.60)",
+          "op": "time",
+          "to": "21:00",
+          "toDayOfWeek": 3
+        },
+        {
+          "colorMode": "yellow",
+          "fill": true,
+          "fillColor": "rgba(234, 112, 112, 0.12)",
+          "from": "13:00",
+          "fromDayOfWeek": 4,
+          "line": true,
+          "lineColor": "rgba(237, 46, 24, 0.60)",
+          "op": "time",
+          "to": "21:00",
+          "toDayOfWeek": 4
+        },
+        {
+          "colorMode": "yellow",
+          "fill": true,
+          "fillColor": "rgba(234, 112, 112, 0.12)",
+          "from": "13:00",
+          "fromDayOfWeek": 5,
+          "line": true,
+          "lineColor": "rgba(237, 46, 24, 0.60)",
+          "op": "time",
+          "to": "21:00",
+          "toDayOfWeek": 5
+        }
+      ],
+      "timeShift": null,
+      "title": "Market Values",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 22,
+  "style": "dark",
+  "tags": [
+    "market",
+    "stocks",
+    "stock market",
+    "markets"
+  ],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "${DS_MARKET}",
+        "definition": "SELECT DISTINCT(`symbol`) FROM `quotes` WHERE $__timeFilter(`time`) ORDER BY `symbol` ASC",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Stock Symbol",
+        "multi": true,
+        "name": "stock_symbol",
+        "options": [],
+        "query": "SELECT DISTINCT(`symbol`) FROM `quotes` WHERE $__timeFilter(`time`) ORDER BY `symbol` ASC",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
+  },
+  "time": {
+    "from": "now-12h",
+    "to": "now"
+  },
+  "timepicker": {
+    "hidden": false,
+    "nowDelay": "",
+    "refresh_intervals": [
+      "30s",
+      "1m",
+      "5m",
+      "10m",
+      "30m",
+      "1h",
+      "2h",
+      "3h",
+      "6h"
+    ]
+  },
+  "timezone": "utc",
+  "title": "Markets",
+  "uid": "3jRMjsXZk",
+  "version": 17
+}
