@@ -15,6 +15,9 @@ The JSON for the Grafana dashboard that I ended up with is [available here](mark
 
 #### TODO
 
+- If it was not apparent, the time zone of my server, database timestamp values, cron job, graphs, and dashboard are all in [Coordinated Universal Time](https://en.wikipedia.org/wiki/Coordinated_Universal_Time) (UTC).
+I'm pretty sure the United States stock market (NYSE) opens and closes based on the _America/New_York_ ("Eastern US") time zone. I don't really have a plan for when Daylight Savings Time (DST) changes again, so that's going to be a problem I imagine?
+
 - If the Alpha Vantage API fails for some reason, or rate limits my requests (more likely), the existing local CSV from the last time that the script ran will be used simply storing the older data in MySQL again.
 I probably should just not write any data to the database if the latest price cannot be found, or if the API fails somehow.
 
