@@ -1,0 +1,12 @@
+symbols = [ 'DJIA', 'INX' ]
+
+db_creds_rw = dict(
+    host = 'localhost',
+    user = 'market_rw',
+    passwd = 'secret',
+    db = 'market'
+)
+
+vantage_creds = dict(
+    api_key = 'ABCSECRET123'
+)

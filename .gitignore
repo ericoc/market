@@ -1,0 +1,11 @@
+__pycache__
+venv/
+creds.py
+*.gz
+*.log
+*.pyc
+*.save
+*.csv
+.*
+*~
+!.gitignore

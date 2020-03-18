@@ -1,0 +1,4 @@
+# m         h       dom     mon     dow     command
+
+30,40,50    13      *       *       1-5     bash ~/market.sh
+*/10        14-20   *       *       1-5     bash ~/market.sh
