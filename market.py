@@ -13,7 +13,7 @@ def get_quote(symbol):
 
         # Specify the Alpha Vantage API URL and a friendly user-agent before hitting the API
         url = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}&apikey={creds.vantage_creds['api_key']}&datatype=csv"
-        user_agent = 'Stock Market Graphing / https://github.com/ericoc/'
+        user_agent = 'Stock Market Grafana / https://github.com/ericoc/market'
         headers = { 'User-Agent': user_agent}
         data = requests.get(url, headers=headers)
         data.raise_for_status()
